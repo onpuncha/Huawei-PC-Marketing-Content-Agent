@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.cache/
+node_modules/
+__pycache__/
+
+# Organizer-provided full knowledge base: configure its local path instead of publishing.
+/华为PC知识库/
+/tmp_pdf_review/
+/ima-skills-1.1.10.zip
+/vendor/**/__MACOSX/
+/vendor/**/.DS_Store
+/vendor/**/.history/
+/output/screenshots/
+/output/browser-report.json
