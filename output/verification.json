@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "date": "2026-10-18T08:53:29.755Z",
+  "model": "gpt-6.1-sol",
+  "provider": "4router",
+  "mallProductCount": 5,
+  "cases": [
+    {
+      "id": "b6d10b16-9679-4c39-aabe-ee6b4ad7727a",
+      "title": "新生开学选电脑｜课堂到图书馆，先看这3点",
+      "platform": "小红书",
+      "images": 3,
+      "mallImages": 1,
+      "calls": 4,
+      "seconds": 96.2
+    },
+    {
+      "id": "dc4809fe-6019-4198-ac72-69f31083e865",
+      "title": "开学选电脑，先看看每天怎么背",
+      "platform": "门店朋友圈",
+      "images": 1,
+      "mallImages": 1,
+      "calls": 4,
+      "seconds": 45.6
+    }
+  ],
+  "checks": [
+    "GPT-generation",
+    "independent-audit",
+    "mall-knowledge",
+    "mall-image-http200",
+    "no-duplicate-urls",
+    "revision",
+    "platform-change",
+    "md-json-txt-export"
+  ]
+}

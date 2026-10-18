@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light"><title>知序 · 华为 PC 营销工作台 · GPT 版</title>
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="知序首页"><span class="brand-mark">知</span><span>知序<span class="brand-divider">/</span><span class="brand-sub">PC 营销工作台</span></span></a>
+    <nav aria-label="主导航"><button class="nav-item active" data-view="workspace">创作工作台</button><button class="nav-item" data-view="library">资料与图片</button><button class="nav-item" data-view="history">运行记录</button></nav>
+    <div class="top-meta"><span class="mode-pill"><span class="status-dot"></span>GPT + 商城版</span><button id="connection-button" class="icon-button" title="查看连接状态" aria-label="查看连接状态">⚙</button></div>
+  </header>
+  <main>
+    <section class="page-intro"><div><div class="eyebrow">HUAWEI PC · CONTENT STUDIO</div><h1 id="page-title">让每个卖点，都有据可循。</h1><p id="page-description">从真实产品资料出发，写出适合人群与平台的营销内容。</p></div><div class="connection-summary"><span id="kb-dot" class="status-dot muted"></span><span id="kb-status">正在连接知识库</span><span class="vertical-line"></span><span id="model-status">检查模型配置</span></div></section>
+    <div id="global-alert" class="alert hidden" role="alert"></div>
+    <section id="workspace-view" class="workspace">
+      <aside class="task-panel card">
+        <div class="panel-title"><span class="step-number">01</span><h2>定义创作任务</h2><span class="subtle-label">TASK</span></div>
+        <form id="task-form" novalidate>
+          <label for="product">产品型号 <span class="required">*</span></label><select id="product" name="product" required><option value="">请选择具体产品</option></select><p class="field-hint" id="product-hint">按具体型号检索，避免混用参数</p>
+          <label for="audience">目标人群 <span class="required">*</span></label><input id="audience" maxlength="200" placeholder="例如：大学新生" list="audience-options" required><datalist id="audience-options"><option value="大学新生"><option value="经常出差的职场人士"><option value="摄影与内容创作者"><option value="家庭换新用户"><option value="中小企业采购负责人"></datalist>
+          <label for="scene">使用场景 <span class="required">*</span></label><input id="scene" maxlength="200" placeholder="例如：开学购机，课堂到图书馆" list="scene-options" required><datalist id="scene-options"><option value="开学购机"><option value="出差与移动办公"><option value="内容创作"><option value="家庭换新"><option value="企业采购"><option value="门店到访"></datalist>
+          <label>发布平台 <span class="required">*</span></label><div class="platform-picker" role="group" aria-label="发布平台"><button type="button" class="platform-option selected" data-platform="xiaohongshu" aria-pressed="true"><span class="platform-glyph red">红</span>小红书</button><button type="button" class="platform-option" data-platform="wechat" aria-pressed="false"><span class="platform-glyph green">公</span>公众号</button><button type="button" class="platform-option" data-platform="moments" aria-pressed="false"><span class="platform-glyph blue">圈</span>朋友圈</button><button type="button" class="platform-option" data-platform="poster" aria-pressed="false"><span class="platform-glyph orange">海</span>门店海报</button></div>
+          <div class="two-fields"><div><label for="purchase-stage">购买阶段</label><select id="purchase-stage"><option>了解与比较</option><option>初次了解</option><option>准备到店体验</option><option>配置确认</option></select></div><div><label for="goal">内容目标</label><select id="goal"><option>帮助选购并引导咨询</option><option>促进到店体验</option><option>解释产品特点</option><option>收集用户需求</option></select></div></div>
+          <label for="requirements">补充要求 <span class="optional">可选</span></label><textarea id="requirements" rows="3" maxlength="1800" placeholder="想突出什么？有哪些需要避免的表达？"></textarea>
+          <div id="form-errors" class="form-errors hidden" role="alert"></div>
+          <button type="submit" id="generate-button" class="primary-button"><span>✦</span> 生成图文内容 <span class="button-arrow">↗</span></button>
+          <p class="privacy-note">任务草稿自动保存在本机 · GPT 生成与审核<br>仅发送所需资料，密钥不向浏览器公开</p>
+        </form>
+      </aside>
+      <section class="editor-panel card">
+        <div class="panel-title editor-title"><div class="inline-heading"><span class="step-number">02</span><h2>内容工作区</h2></div><div id="result-platform" class="small-chip">等待创作</div></div>
+        <div id="job-progress" class="job-progress hidden" aria-live="polite"><div class="progress-heading"><span class="pulse-dot"></span><strong id="progress-label">正在准备任务</strong><span id="progress-time">0s</span></div><div class="progress-track"><div id="progress-bar"></div></div><div id="progress-steps" class="progress-steps"></div></div>
+        <div class="editor-tabs" role="tablist" aria-label="内容视图"><button class="editor-tab active" data-tab="preview" role="tab" aria-selected="true">图文预览</button><button class="editor-tab" data-tab="strategy" role="tab" aria-selected="false">场景策略</button><button class="editor-tab" data-tab="checks" role="tab" aria-selected="false">核验报告 <span id="check-count"></span></button></div>
+        <div id="empty-state" class="empty-state"><div class="empty-visual"><div class="paper back"></div><div class="paper front"><span class="paper-tag"></span><span class="paper-line wide"></span><span class="paper-line"></span><div class="paper-image"><span>✦</span></div><span class="paper-line wide"></span><span class="paper-line short"></span></div><span class="visual-plus">+</span></div><div class="eyebrow">A GOOD STORY STARTS WITH FACTS</div><h3>从一份有依据的内容开始</h3><p>选择产品和场景，让资料变成清楚、自然的表达。<br>每一次生成，都附带事实依据与核验记录。</p><button id="example-button" class="secondary-button">试试「开学购机」示例 <span>↗</span></button><div class="empty-feature-row"><span>◉ 型号匹配</span><span>▧ 真实配图</span><span>✓ 逐项核验</span></div></div>
+        <div id="preview-tab" class="tab-content hidden"></div><div id="strategy-tab" class="tab-content hidden"></div><div id="checks-tab" class="tab-content hidden"></div>
+        <div id="result-actions" class="result-actions hidden"><div class="export-row"><button id="copy-button" class="secondary-button">复制正文</button><a id="export-md" class="secondary-button" download>导出 Markdown</a><a id="export-txt" class="text-button" download>TXT</a><a id="export-json" class="text-button" download>完整记录 JSON</a></div><div class="revision-box"><label for="revision">继续修改</label><div class="revision-controls"><input id="revision" maxlength="1800" placeholder="例如：删去屏幕卖点，突出日常携带"><select id="revision-platform" aria-label="修改后的平台"><option value="">保持平台</option><option value="xiaohongshu">换成小红书</option><option value="wechat">换成公众号</option><option value="moments">换成朋友圈</option><option value="poster">换成海报</option></select><button id="revise-button" class="primary-button small">修改并核验 ↗</button></div></div></div>
+      </section>
+      <aside class="evidence-panel"><div class="card evidence-card"><div class="panel-title"><span class="step-number">03</span><h2>资料依据</h2><span class="source-badge">LOCAL</span></div><div id="evidence-content" class="evidence-content"><div class="source-placeholder"><span>▤</span><p>选中产品后，查看对应的<br>产品事实与图片来源。</p></div></div></div><div class="workflow-note"><span class="note-line"></span><h3>先有事实，再有表达。</h3><p>产品参数来自本地知识库。<br>动态价格与优惠需另行确认。<br>生成结果在发布前请人工复核。</p></div></aside>
+    </section>
+    <section id="library-view" class="hidden"><div class="section-heading"><h2>本地资料与图片</h2><p>只读取产品事实及同目录图片索引；未扫描整个知识库。</p></div><div id="library-grid" class="library-grid"></div></section>
+    <section id="history-view" class="hidden"><div class="section-heading"><h2>运行记录</h2><p>记录保存在本机，每次修改保留独立版本和核验依据。</p></div><div id="history-list" class="history-list"></div></section>
+    <footer><span>知序 · GPT + 商城版 <span class="footer-dot">·</span> AI+华为 PC 营销软文智能体</span><span>真实资料 / 场景表达 / 可溯核验</span></footer>
+  </main>
+  <dialog id="connection-dialog"><div class="dialog-heading"><h2 id="detail-title">连接状态</h2><button id="close-dialog" class="icon-button" aria-label="关闭">×</button></div><div id="connection-details"></div><p id="detail-footnote" class="field-hint">本地版无需 ima 凭证。密钥由后端环境变量读取，页面不展示密钥。模型“已配置”不代表已实时测试。</p></dialog>
+  <div id="toast" class="toast hidden" role="status"></div>
+</body>
+</html>
+

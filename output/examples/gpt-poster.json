@@ -1,0 +1,431 @@
+{
+  "id": "0fd2e3b0-cd1d-4536-96aa-b73f853f31cc",
+  "createdAt": "2026-10-18T08:59:14.849Z",
+  "mode": "gpt-vmall",
+  "model": "gpt-6.1-sol",
+  "task": {
+    "productId": "3db10d295908d5",
+    "audience": "经常出差的职场人士",
+    "scene": "移动办公与门店体验",
+    "platform": "poster",
+    "goal": "促进到店体验",
+    "purchaseStage": "了解与比较",
+    "requirements": "只突出一个有资料依据的便携卖点。使用一张匹配的商城图，不写价格、促销和虚构体验。"
+  },
+  "product": {
+    "id": "3db10d295908d5",
+    "name": "HUAWEI MateBook Pro S",
+    "system": "HarmonyOS 6.1"
+  },
+  "platform": "门店海报",
+  "status": "ready_with_notes",
+  "strategy": {
+    "angle": "围绕差旅选购中的随身重量需求，只突出标准屏版重量，引导到店体验。",
+    "priorities": [
+      "标准屏版重量798 g"
+    ],
+    "reason": "以一个有资料依据的便携指标帮助出差人群初步比较，符合门店海报短句、单一卖点的要求，不延伸到续航或办公性能。"
+  },
+  "initialStrategy": {
+    "audience": "经常出差的职场人士",
+    "scene": "移动办公与门店体验",
+    "goal": "促进到店体验",
+    "purchaseStage": "了解与比较",
+    "angle": "从差旅与会议衔接出发：路上整理资料、会议展示、回到工位继续协作",
+    "priorities": [
+      "便携和连接方式",
+      "屏幕与文档处理",
+      "会议、系统与跨设备条件"
+    ],
+    "questions": [
+      "常用会议和办公软件是什么？",
+      "需要连接哪些显示器或外设？"
+    ],
+    "platform": "门店海报"
+  },
+  "article": {
+    "title": "出差选电脑，先关注随身重量",
+    "intro": "下一次移动办公，从到店感受便携性开始。",
+    "sections": [
+      {
+        "heading": "标准屏版，重量798 g",
+        "text": "实际重量依配置、制造工艺、测量方法的不同可能有所差异。",
+        "source_ids": [
+          "F02"
+        ]
+      }
+    ],
+    "cta": "到店体验拿取感受，咨询适合你的配置。",
+    "tags": []
+  },
+  "claims": [
+    {
+      "text": "标准屏版重量798 g；实际重量依配置、制造工艺、测量方法的不同可能有所差异。",
+      "source_ids": [
+        "F02"
+      ],
+      "evidence": [
+        {
+          "source_id": "F02",
+          "quote": "宽度\n\n310.8 mm\n\n深度\n\n220.8 mm\n\n高度\n\nHUAWEI MateBook Pro S 标准屏版：11.9 mm\n\nHUAWEI MateBook Pro S 防窥屏版：11.9 mm\n\nHUAWEI MateBook Pro S 柔光屏版：11.9 mm\n\nHUAWEI MateBook Pro S 典藏版：12.2 mm\n\n*实际尺寸和厚度依配置、制造工艺、测量方法的不同可能有所差异。\n\n重量\n\nHUAWEI MateBook Pro S 标准屏版：798 g\n\nHUAWEI MateBook Pro S 防窥屏版：798 g\n\nHUAWEI MateBook Pro S 柔光屏版：805 g\n\nHUAWEI MateBook Pro S 典藏版：825 g\n\n*实际尺寸和重量依配置、制造工艺、测量方法的不同可能有所差异。"
+        }
+      ],
+      "index": 1,
+      "review": {
+        "index": 1,
+        "status": "supported",
+        "reason": "F02明确记载HUAWEI MateBook Pro S标准屏版重量为798 g，并说明实际重量依配置、制造工艺、测量方法的不同可能有所差异，与断言一致。"
+      }
+    }
+  ],
+  "imagePlan": [
+    {
+      "id": "VIMG2",
+      "name": "vmall_10086431650525_2.jpg",
+      "model": "HUAWEI MateBook Pro S",
+      "pageUrl": "https://www.vmall.com/product/10086431650525.html",
+      "originalUrl": "https://res.vmallres.com/uomcdn/CN/cms/202609/a62addf15a284928baf322c764e824cc.jpg",
+      "description": "HUAWEI MateBook Pro S · 商城商品素材（以画面为准，不据此推断场景或功能）",
+      "usage": "匹配商品素材；同款式裁切仅保留一个，不引用图片中的未验证促销。",
+      "width": 0,
+      "height": 0,
+      "available": true,
+      "sourceKind": "vmall",
+      "sourceName": "华为商城",
+      "fetchedAt": "2026-10-18T08:58:20.459Z",
+      "artworkGroup": "10086431650525-material-27",
+      "url": "/api/mall-images/3db10d295908d5/fc5359b477bd52f1",
+      "image_id": "VIMG2",
+      "position": "封面",
+      "after_section": 0,
+      "caption": "商城商品素材",
+      "reason": "使用匹配当前商品且近期未使用的商城素材展示产品；不以图片证明重量或具体销售配置。"
+    }
+  ],
+  "evidence": {
+    "source": {
+      "kind": "local",
+      "title": "产品事实.md",
+      "path": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/产品事实.md",
+      "urls": [
+        "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/specs/"
+      ],
+      "sha256": "b2c07e62dcaa1e4568d58e4c27acc7b346031333c195d6c3f490993625768d06",
+      "snapshotDate": "2026-10-17",
+      "additionalSources": [
+        {
+          "kind": "vmall",
+          "title": "HUAWEI MateBook Pro S",
+          "url": "https://www.vmall.com/product/10086431650525.html",
+          "fetchedAt": "2026-10-18T08:58:20.459Z",
+          "sku": "2801010200818"
+        }
+      ]
+    },
+    "facts": [
+      {
+        "id": "F01",
+        "title": "操作系统",
+        "content": "HarmonyOS 6.1"
+      },
+      {
+        "id": "F02",
+        "title": "尺寸与重量",
+        "content": "宽度\n\n310.8 mm\n\n深度\n\n220.8 mm\n\n高度\n\nHUAWEI MateBook Pro S 标准屏版：11.9 mm\n\nHUAWEI MateBook Pro S 防窥屏版：11.9 mm\n\nHUAWEI MateBook Pro S 柔光屏版：11.9 mm\n\nHUAWEI MateBook Pro S 典藏版：12.2 mm\n\n*实际尺寸和厚度依配置、制造工艺、测量方法的不同可能有所差异。\n\n重量\n\nHUAWEI MateBook Pro S 标准屏版：798 g\n\nHUAWEI MateBook Pro S 防窥屏版：798 g\n\nHUAWEI MateBook Pro S 柔光屏版：805 g\n\nHUAWEI MateBook Pro S 典藏版：825 g\n\n*实际尺寸和重量依配置、制造工艺、测量方法的不同可能有所差异。"
+      },
+      {
+        "id": "F03",
+        "title": "屏幕",
+        "content": "尺寸\n\n14.2 英寸\n\n类型\n\n柔性 OLED（标准屏、防窥屏、柔光屏）\n\n屏占比\n\n93.5%\n\n屏幕比例\n\n3:2\n\n分辨率\n\n3120 × 2080，264 ppi\n\n刷新率\n\n120 Hz\n\n峰值亮度\n\n1600 尼特\n\n*典型值，数据来源于华为实验室。需关闭防窥模式，打开 HDR 模式，并配合 HDR 内容源显示，局部峰值亮度可达 1600 尼特⁠，请以实际使用情况为准。\n\n色域\n\nP3 色域 / sRGB 色域\n\n色准\n\n平均 △E < 1\n\n色深\n\n10.7 亿色\n\n对比度\n\n2000000:1\n\n触摸屏\n\n支持十点触控"
+      },
+      {
+        "id": "F04",
+        "title": "处理器",
+        "content": "麒麟XE90 处理器"
+      },
+      {
+        "id": "F05",
+        "title": "存储",
+        "content": "1 TB / 512 GB\n\n*硬盘格式化之后的实际容量可能较小。"
+      },
+      {
+        "id": "F06",
+        "title": "内存",
+        "content": "32 GB / 24 GB / 16 GB"
+      },
+      {
+        "id": "F07",
+        "title": "无线连接",
+        "content": "WLAN\n\n802.11a/b/g/n/ac/ax/be\n\n2.4 GHz 和 5 GHz 双频\n\n2 × 2 MIMO\n\n支持 WPA/WPA2/WPA3\n\n蓝牙\n\n蓝牙 6.0"
+      },
+      {
+        "id": "F08",
+        "title": "电池",
+        "content": "材料\n\n锂聚合物\n\n容量\n\n54 Wh（额定容量）"
+      },
+      {
+        "id": "F09",
+        "title": "接口",
+        "content": "左侧：USB Type-C（USB 3.2 Gen 1）× 1\n\n右侧：USB Type-C（USB 3.2 Gen 1）× 1，支持 DisplayPort 1.2（最大分辨率 4K@60 Hz）\n\n右侧：隐私开关* × 1\n\n*标准屏版、柔光屏版机型支持一键开启/关闭摄像头、麦克风及定位权限；防窥屏版、典藏版机型支持一键开启/关闭防窥功能。"
+      },
+      {
+        "id": "F10",
+        "title": "键盘和触控板",
+        "content": "触控板支持多点触控和压力触控；支持 HUAWEI M-PEN 3 书写\n\n内置“华为分享”感应区\n\n1.5 mm 键程\n\n全尺寸背光键盘\n\n电源键\n\n指纹电源键"
+      },
+      {
+        "id": "F11",
+        "title": "摄像头",
+        "content": "1080P 高清前置摄像头 × 1，前置环境光传感器 × 1\n\n1080P 高清后置摄像头 × 1，后置环境光传感器 × 1"
+      },
+      {
+        "id": "F12",
+        "title": "音频",
+        "content": "扬声器 × 4\n\n麦克风 × 6"
+      },
+      {
+        "id": "F13",
+        "title": "特色应用",
+        "content": "小艺慧记、小艺深度研究、小艺智慧搜索、小艺输入法、待机屏保、华为笔记、AI 智慧伴唱、AI 降噪通话、文件管理、图库、畅连、备忘录、日历、智慧生活、我的华为、华为云空间、华为应用市场、华为分享、应用接续、键鼠共享、跨设备剪贴板、超级终端、碰一碰、通信共享、无线投屏、有线投屏"
+      },
+      {
+        "id": "F14",
+        "title": "包装清单",
+        "content": "笔记本 × 1\n\n华为超级快充多设备电源适配器（66 W）恒功率版 × 1\n\nUSB Type-C 转 USB Type-C 充电数据线 × 1\n\nUSB Type-C 转 USB Type-A 转接线 × 1\n\n快速指南 × 1\n\n抛光布 × 1（仅柔光屏版支持）\n\n手写笔（HUAWEI M-Pen 3 幻夜黑，含备用笔尖和笔尖夹）× 1（仅典藏版支持）\n\n即将离开consumer.huawei.com\n\n您即将跳转至第三方页面，华为无法控制，也无法对该页面内容负责。\n\n继续访问\n\n取消"
+      },
+      {
+        "id": "V01",
+        "title": "华为商城商品身份与来源",
+        "content": "来源：华为商城电脑专区。读取时间：2026-10-18T08:58:20.459Z。\n商品名称：HUAWEI MateBook Pro S。\n商品ID：10086431650525。销售SKU：2801010200818。\n商品页：https://www.vmall.com/product/10086431650525.html\n仅确认商品身份与素材归属，未验证当前价格、库存或促销；图库素材不证明具体配置参数。"
+      }
+    ],
+    "images": [
+      {
+        "id": "VIMG2",
+        "name": "vmall_10086431650525_2.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://www.vmall.com/product/10086431650525.html",
+        "originalUrl": "https://res.vmallres.com/uomcdn/CN/cms/202609/a62addf15a284928baf322c764e824cc.jpg",
+        "description": "HUAWEI MateBook Pro S · 商城商品素材（以画面为准，不据此推断场景或功能）",
+        "usage": "匹配商品素材；同款式裁切仅保留一个，不引用图片中的未验证促销。",
+        "width": 0,
+        "height": 0,
+        "available": true,
+        "sourceKind": "vmall",
+        "sourceName": "华为商城",
+        "fetchedAt": "2026-10-18T08:58:20.459Z",
+        "artworkGroup": "10086431650525-material-27",
+        "url": "/api/mall-images/3db10d295908d5/fc5359b477bd52f1"
+      },
+      {
+        "id": "I02",
+        "name": "hwpc_matebook-pro-s_多彩配色外观_06_d792d65d.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-purple-4-blur.jpg",
+        "description": "HUAWEI MateBook Pro S 仲夏紫，人物创拍和外观特写图，展示产品细节",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 630,
+        "height": 680,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_多彩配色外观_06_d792d65d.jpg",
+        "url": "/api/images/3db10d295908d5/1"
+      },
+      {
+        "id": "I04",
+        "name": "hwpc_matebook-pro-s_智慧协同功能_03_076021a9.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-ai-blur.jpg",
+        "description": "",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 1296,
+        "height": 720,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_智慧协同功能_03_076021a9.jpg",
+        "url": "/api/images/3db10d295908d5/3"
+      },
+      {
+        "id": "I05",
+        "name": "hwpc_matebook-pro-s_长续航快充场景_04_6f60ddb8.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-batterylife-blur.jpg",
+        "description": "",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 1296,
+        "height": 720,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_长续航快充场景_04_6f60ddb8.jpg",
+        "url": "/api/images/3db10d295908d5/4"
+      },
+      {
+        "id": "I06",
+        "name": "hwpc_matebook-pro-s_高清护眼屏幕_02_f55ba57d.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-privacy-screen-ff-pc.jpg",
+        "description": "",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 1944,
+        "height": 1080,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_高清护眼屏幕_02_f55ba57d.jpg",
+        "url": "/api/images/3db10d295908d5/5"
+      },
+      {
+        "id": "VIMG1",
+        "name": "vmall_10086431650525_1.png",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://www.vmall.com/product/10086431650525.html",
+        "originalUrl": "https://res.vmallres.com/FssCdnProxy/vmall_product_uom/pmsSalesFile/4F45028A9FECC04454E09D36AFF97C63.png",
+        "description": "HUAWEI MateBook Pro S · 商品主图（以画面为准，不据此推断场景或功能）",
+        "usage": "匹配商品素材；同款式裁切仅保留一个，不引用图片中的未验证促销。",
+        "width": 0,
+        "height": 0,
+        "available": true,
+        "sourceKind": "vmall",
+        "sourceName": "华为商城",
+        "fetchedAt": "2026-10-18T08:58:20.459Z",
+        "artworkGroup": "10086431650525-primary",
+        "url": "/api/mall-images/3db10d295908d5/f489943cfce75edc"
+      },
+      {
+        "id": "I01",
+        "name": "hwpc_matebook-pro-s_多彩配色外观_05_0f907e31.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-purple-3.jpg",
+        "description": "HUAWEI MateBook Pro S 仲夏紫，人物创拍和外观特写图，展示产品细节",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 1260,
+        "height": 1360,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_多彩配色外观_05_0f907e31.jpg",
+        "url": "/api/images/3db10d295908d5/0"
+      },
+      {
+        "id": "I03",
+        "name": "hwpc_matebook-pro-s_精致产品细节_01_9e99c213.jpg",
+        "model": "HUAWEI MateBook Pro S",
+        "pageUrl": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "originalUrl": "https://consumer.huawei.com/content/dam/huawei-cbg-site/cn/mkt/pdp/harmonyos-computer/matebook-pro-s/assets/before/huawei-matebook-pro-s-weight-ff-pc.jpg",
+        "description": "精致产品细节",
+        "usage": "产品介绍配图，使用前核对画面与具体配置",
+        "width": 1944,
+        "height": 1080,
+        "available": true,
+        "relative": "P1-产品参数库/01-鸿蒙电脑/HUAWEI MateBook Pro S/images/hwpc_matebook-pro-s_精致产品细节_01_9e99c213.jpg",
+        "url": "/api/images/3db10d295908d5/2"
+      }
+    ],
+    "sources": [
+      {
+        "kind": "local",
+        "title": "产品事实.md",
+        "url": "https://consumer.huawei.com/cn/harmonyos-computer/matebook-pro-s/",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "kind": "vmall",
+        "title": "HUAWEI MateBook Pro S",
+        "url": "https://www.vmall.com/product/10086431650525.html",
+        "fetchedAt": "2026-10-18T08:58:20.459Z",
+        "sku": "2801010200818"
+      }
+    ],
+    "mall": {
+      "matched": true,
+      "fetchedAt": "2026-10-18T08:58:20.459Z",
+      "pageUrl": "https://www.vmall.com/portal/activity/index.html?isShowLayout=false&pn=pczq",
+      "productName": "HUAWEI MateBook Pro S",
+      "sku": "2801010200818"
+    }
+  },
+  "checks": [
+    {
+      "name": "产品事实",
+      "status": "passed",
+      "detail": "1项产品事实已定位原文，并由模型复核；依据为本地快照。"
+    },
+    {
+      "name": "图片型号",
+      "status": "passed",
+      "detail": "按本地索引核对型号与文件存在性；未进行视觉识别或授权审查。"
+    },
+    {
+      "name": "配图完整度",
+      "status": "passed",
+      "detail": "可用图片数量满足平台要求。"
+    },
+    {
+      "name": "营销合规",
+      "status": "passed",
+      "detail": "已执行关键词规则与模型审核，发布前仍需人工复核。"
+    }
+  ],
+  "warnings": [
+    "重量依据提供的本地产品事实快照，不是实时访问官网、商城或ima的核验结果。",
+    "798 g仅对应资料中的标准屏版，不得套用于其他版本；实际重量差异条件已在正文保留。",
+    "商城来源仅确认商品身份、SKU与素材归属，未确认销售SKU对应的屏幕版本；发布前需人工核对海报素材及门店展示配置与标准屏版是否一致。",
+    "本稿仅采用当前商品的F02重量事实，不引用其他型号参数；正文未重复完整型号名称，发布时需人工核对商品标识。",
+    "发布前需检查商城素材，不展示其中未经核验的促销或参数文字。",
+    "价格、促销和库存未核验，本稿不作相关陈述。"
+  ],
+  "issues": [],
+  "repairs": [
+    "正文混入了其他型号完整名称"
+  ],
+  "events": [
+    {
+      "phase": "understand",
+      "label": "解析人群、场景与平台策略",
+      "percent": 8,
+      "at": "2026-10-18T08:58:21.132Z"
+    },
+    {
+      "phase": "retrieve",
+      "label": "检索本地产品事实与同型号图片",
+      "percent": 18,
+      "at": "2026-10-18T08:58:21.132Z"
+    },
+    {
+      "phase": "generate",
+      "label": "编排图文并生成文案",
+      "percent": 34,
+      "at": "2026-10-18T08:58:21.135Z"
+    },
+    {
+      "phase": "verify",
+      "label": "独立核对事实、图片和营销合规",
+      "percent": 52,
+      "at": "2026-10-18T08:58:41.173Z"
+    },
+    {
+      "phase": "repair",
+      "label": "根据核验问题修正文案",
+      "percent": 66,
+      "at": "2026-10-18T08:58:49.747Z"
+    },
+    {
+      "phase": "verify",
+      "label": "复核修正后的事实、图片与合规",
+      "percent": 85,
+      "at": "2026-10-18T08:59:03.451Z"
+    },
+    {
+      "phase": "complete",
+      "label": "核验完成，内容可预览与导出",
+      "percent": 100,
+      "at": "2026-10-18T08:59:14.849Z"
+    }
+  ],
+  "telemetry": {
+    "durationSeconds": 53.7,
+    "modelCalls": 4,
+    "promptTokens": 17290,
+    "completionTokens": 1433
+  },
+  "revisionOf": null
+}

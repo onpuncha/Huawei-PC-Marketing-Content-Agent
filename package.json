@@ -1,14 +1,17 @@
 {
-  "name": "huawei-pc-content-agent",
-  "version": "0.1.0",
+  "name": "huawei-pc-content-agent-gpt",
+  "version": "0.2.0-gpt",
   "private": true,
   "type": "module",
   "description": "Local knowledge-backed Huawei PC marketing agent",
-  "engines": {"node": ">=22"},
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node src/server.mjs",
     "start:local": "node src/server.mjs",
     "test": "node --test tests/*.test.mjs",
-    "verify:local": "node tools/verify-local.mjs"
+    "verify:local": "node tools/verify-gpt.mjs",
+    "start:gpt": "node src/server.mjs"
   }
 }
