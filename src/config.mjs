@@ -15,6 +15,7 @@ if (fs.existsSync(envFile)) {
 }
 function discoverKnowledgeRoot() {
   if (process.env.LOCAL_KB_PATH?.trim()) return path.resolve(ROOT, process.env.LOCAL_KB_PATH.trim());
+  if(fs.existsSync(path.join(ROOT,'data','P1-产品参数库')))return path.join(ROOT,'data');
   const parent = fs.existsSync(path.join(ROOT,'华为PC知识库'))?path.join(ROOT,'华为PC知识库'):path.join(ROOT,'..','华为PC知识库');
   if (!fs.existsSync(parent)) return parent;
   if (fs.existsSync(path.join(parent, 'P1-产品参数库'))) return parent;
@@ -22,7 +23,7 @@ function discoverKnowledgeRoot() {
     .find(p => fs.existsSync(path.join(p, 'P1-产品参数库'))) || parent;
 }
 export const config = {
-  port: Number(process.env.GPT_PORT || 8788), host: '127.0.0.1', kbRoot: discoverKnowledgeRoot(),
+  port: Number(process.env.PORT || process.env.GPT_PORT || 7860), host: process.env.HOST || '0.0.0.0', kbRoot: discoverKnowledgeRoot(),
   apiKey: process.env.GPT_API_KEY || process.env.LLM_API_KEY || '', model: process.env.GPT_MODEL || 'gpt-6.1-sol',
   baseUrl: (process.env.GPT_BASE_URL || 'https://4router.net/v1').replace(/\/$/, ''),
   cacheDir: path.join(ROOT, '.cache', 'gpt'), timeoutMs: 120000,

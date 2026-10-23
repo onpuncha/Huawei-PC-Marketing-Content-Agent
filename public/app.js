@@ -2,7 +2,7 @@
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
 const state={products:[],platform:'xiaohongshu',health:null,result:null,busy:false,tab:'preview',selectedEvidence:null,evidenceVersion:0};
-const labels={xiaohongshu:'小红书',wechat:'公众号',moments:'门店朋友圈',poster:'门店海报'};
+const labels={xiaohongshu:'小红书',wechat:'公众号',douyin:'抖音脚本',weibo:'微博图文',moments:'门店朋友圈',poster:'门店海报'};
 const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function safeLink(value) {try {const u=new URL(value);return u.protocol==='https:' && ['consumer.huawei.com','www.vmall.com','vmall.com','res.vmallres.com'].includes(u.hostname)?e(u.href):'#';}catch{return '#';}}
 async function api(url,options={}) {
@@ -15,7 +15,9 @@ function notify(message){$('#toast').textContent=message;$('#toast').classList.r
 function showError(message){$('#global-alert').textContent=message;$('#global-alert').classList.remove('hidden');}
 function switchView(view) {
   $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
-  for(const key of ['workspace','library','history'])$('#'+key+'-view').classList.toggle('hidden',key!==view);
+  for(const key of ['workspace','library','history','research','learning'])$('#'+key+'-view').classList.toggle('hidden',key!==view);
+  if(view==='research')window.loadResearch?.();
+  if(view==='learning')window.loadLearning?.();
   if(view==='history')loadHistory();
   if(view==='library')renderLibrary();
 }
@@ -93,6 +95,10 @@ function renderStrategy(r) {
   const t=r.task,s=r.strategy;
   $('#strategy-tab').innerHTML='<h3 class="report-heading">一、场景判断</h3><dl class="strategy-grid">'+[['目标人群',t.audience],['使用场景',t.scene],['购买阶段',t.purchaseStage],['发布平台',r.platform],['内容目标',t.goal],['产品型号',r.product.name]].map(([k,v])=>'<div><dt>'+e(k)+'</dt><dd>'+e(v)+'</dd></div>').join('')+'</dl><div class="strategy-card"><h3>内容切入点</h3><p>'+e(s.angle)+'</p></div><h3 class="evidence-label">卖点优先级</h3><div class="priority-list">'+(s.priorities || []).map((p,i)=>'<span>'+e(i+1)+'. '+e(p)+'</span>').join('')+'</div><div class="strategy-card"><h3>为什么这样写</h3><p>'+e(s.reason || r.initialStrategy.angle)+'</p></div><h3 class="evidence-label">选购前还可以确认</h3><ul class="plain-list">'+r.initialStrategy.questions.map(q=>'<li>'+e(q)+'</li>').join('')+'</ul>';
 }
+function renderResearchReferences(r) {
+  if(!r.researchReferences?.length)return;
+  $('#strategy-tab').innerHTML+='<h3 class="evidence-label">本次表达研究参考</h3>'+r.researchReferences.map(reference=>'<div class="strategy-card"><h3>案例研究 · '+e(new Date(reference.createdAt).toLocaleString('zh-CN'))+'</h3><p>'+e(reference.report.summary)+'</p><p class="micro">报告 ID：'+e(reference.id)+'。仅借鉴表达方法，产品事实仍按产品原文核验。</p></div>').join('');
+}
 function renderChecks(r) {
   $('#check-count').textContent=r.warnings.length || r.checks.filter(c=>c.status==='pending').length || '✓';
   $('#checks-tab').innerHTML='<h3 class="report-heading">四、核验结果</h3>'+r.checks.map(c=>'<div class="check-row"><span class="check-icon '+(c.status==='passed'?'':'pending')+'">'+(c.status==='passed'?'✓':'!')+'</span><div><h4>'+e(c.name)+' · '+(c.status==='passed'?'已检查':'待确认')+'</h4><p>'+e(c.detail)+'</p></div></div>').join('')+(r.issues.length?'<h3 class="evidence-label">待解决问题</h3><ul class="plain-list">'+r.issues.map(i=>'<li>'+e(i.message)+'</li>').join('')+'</ul>':'')+(r.repairs.length?'<h3 class="evidence-label">本次修正记录</h3><ul class="plain-list">'+r.repairs.map(i=>'<li>'+e(i)+'</li>').join('')+'</ul>':'')+(r.warnings.length?'<h3 class="evidence-label">待确认信息与使用边界</h3><ul class="plain-list">'+r.warnings.map(w=>'<li>'+e(w)+'</li>').join('')+'</ul>':'')+'<p class="micro">审核基于本地快照与模型判断，不代表已实时核实官方页面，也不代替人工发布审核。</p><div class="telemetry">'+e(new Date(r.createdAt).toLocaleString('zh-CN'))+' · 输入 '+e(r.telemetry.promptTokens)+' tokens / 输出 '+e(r.telemetry.completionTokens)+' tokens</div>';
@@ -105,7 +111,7 @@ function showResult(r) {
   $$('.platform-option').forEach(button=>{button.classList.toggle('selected',button.dataset.platform===state.platform);button.setAttribute('aria-pressed',String(button.dataset.platform===state.platform));});
   $('#empty-state').classList.add('hidden');$('#form-errors').classList.add('hidden');
   $('#result-platform').textContent=r.platform+(r.status==='blocked'?' · 未通过核验':r.checks.some(c=>c.status==='pending')?' · 有待确认项':r.warnings.length?' · '+r.warnings.length+'项提醒':' · 核验通过');
-  renderPreview(r);renderStrategy(r);renderChecks(r);
+  renderPreview(r);renderStrategy(r);renderResearchReferences(r);renderChecks(r);
   renderEvidence({product:r.product,...r.evidence,warnings:r.warnings});
   $('#result-actions').classList.toggle('hidden',!r.article);
   for(const format of ['md','txt','json'])$('#export-'+format).href='/api/export/'+r.id+'?format='+format;
@@ -190,6 +196,14 @@ async function initialize() {
   $('#task-form').addEventListener('input',persistDraft);
   $('#task-form').addEventListener('change',persistDraft);
   document.addEventListener('click',event=>{
+    const direction=event.target.closest('[data-direction]');
+    if(direction){
+      if(state.busy)return;
+      const notes={checklist:'采用选购清单结构：围绕当前一个型号，列出2—4个有证据的选购关注点，每项写清适用场景与到店确认建议。标题不使用最值得买、销量排名或最低价，未核实的价格留空。',scene:'采用场景演示结构：从目标人群的一项具体任务切入，每段围绕一个有证据的产品特点，附可执行的拍摄建议，不虚构实拍、亲测或使用效果。',concern:'采用顾虑解答结构：提出选购前需要确认的问题，再结合当前产品事实逐项说明。只有已确认的业务反馈才可作为需求参考，不捏造客户评价；资料未覆盖的问题明确建议到店核实。'};
+      const note=notes[direction.dataset.direction];if(!note)return;
+      const field=$('#requirements');if(!field.value.includes(note))field.value=(field.value.trim()+'\n'+note).trim().slice(0,1800);
+      persistDraft();notify('已加入创作要求，可继续编辑');
+    }
     if(event.target.closest('#refresh-mall')){const b=event.target.closest('#refresh-mall');b.disabled=true;b.textContent='正在刷新…';api('/api/mall/refresh',{method:'POST',body:'{}'}).then(m=>{state.health.mall=m;$('#connection-dialog').close();if($('#product').value)loadEvidence($('#product').value);notify('商城来源已刷新');}).catch(err=>{showError(err.message);b.disabled=false;b.textContent='重试刷新商城';});}
     const image=event.target.closest('[data-image]');
     if(image)showImage(image.dataset.image,image.dataset.imageScope);
@@ -217,4 +231,5 @@ async function initialize() {
     setBusy(false);
   }catch(err){showError(err.message);$('#generate-button').disabled=true;}
 }
+$('#record-revision-button').addEventListener('click',()=>{if(state.result?.article)window.beginRevision?.(state.result.id);});
 initialize();

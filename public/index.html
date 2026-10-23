@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light"><title>知序 · 华为 PC 营销工作台 · GPT 版</title>
-  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script><script src="/research.js" defer></script><script src="/learning.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/" aria-label="知序首页"><span class="brand-mark">知</span><span>知序<span class="brand-divider">/</span><span class="brand-sub">PC 营销工作台</span></span></a>
-    <nav aria-label="主导航"><button class="nav-item active" data-view="workspace">创作工作台</button><button class="nav-item" data-view="library">资料与图片</button><button class="nav-item" data-view="history">运行记录</button></nav>
+    <nav aria-label="主导航"><button class="nav-item active" data-view="workspace">创作工作台</button><button class="nav-item" data-view="library">资料与图片</button><button class="nav-item" data-view="history">运行记录</button><button class="nav-item" data-view="research">内容研究</button><button class="nav-item" data-view="learning">业务反馈</button></nav>
     <div class="top-meta"><span class="mode-pill"><span class="status-dot"></span>GPT + 商城版</span><button id="connection-button" class="icon-button" title="查看连接状态" aria-label="查看连接状态">⚙</button></div>
   </header>
   <main>
@@ -21,8 +21,9 @@
           <label for="product">产品型号 <span class="required">*</span></label><select id="product" name="product" required><option value="">请选择具体产品</option></select><p class="field-hint" id="product-hint">按具体型号检索，避免混用参数</p>
           <label for="audience">目标人群 <span class="required">*</span></label><input id="audience" maxlength="200" placeholder="例如：大学新生" list="audience-options" required><datalist id="audience-options"><option value="大学新生"><option value="经常出差的职场人士"><option value="摄影与内容创作者"><option value="家庭换新用户"><option value="中小企业采购负责人"></datalist>
           <label for="scene">使用场景 <span class="required">*</span></label><input id="scene" maxlength="200" placeholder="例如：开学购机，课堂到图书馆" list="scene-options" required><datalist id="scene-options"><option value="开学购机"><option value="出差与移动办公"><option value="内容创作"><option value="家庭换新"><option value="企业采购"><option value="门店到访"></datalist>
-          <label>发布平台 <span class="required">*</span></label><div class="platform-picker" role="group" aria-label="发布平台"><button type="button" class="platform-option selected" data-platform="xiaohongshu" aria-pressed="true"><span class="platform-glyph red">红</span>小红书</button><button type="button" class="platform-option" data-platform="wechat" aria-pressed="false"><span class="platform-glyph green">公</span>公众号</button><button type="button" class="platform-option" data-platform="moments" aria-pressed="false"><span class="platform-glyph blue">圈</span>朋友圈</button><button type="button" class="platform-option" data-platform="poster" aria-pressed="false"><span class="platform-glyph orange">海</span>门店海报</button></div>
+          <label>发布平台 <span class="required">*</span></label><div class="platform-picker" role="group" aria-label="发布平台"><button type="button" class="platform-option selected" data-platform="xiaohongshu" aria-pressed="true"><span class="platform-glyph red">红</span>小红书</button><button type="button" class="platform-option" data-platform="wechat" aria-pressed="false"><span class="platform-glyph green">公</span>公众号</button><button type="button" class="platform-option" data-platform="douyin" aria-pressed="false"><span class="platform-glyph blue">抖</span>抖音脚本</button><button type="button" class="platform-option" data-platform="weibo" aria-pressed="false"><span class="platform-glyph orange">微</span>微博图文</button><button type="button" class="platform-option" data-platform="moments" aria-pressed="false"><span class="platform-glyph blue">圈</span>朋友圈</button><button type="button" class="platform-option" data-platform="poster" aria-pressed="false"><span class="platform-glyph orange">海</span>门店海报</button></div>
           <div class="two-fields"><div><label for="purchase-stage">购买阶段</label><select id="purchase-stage"><option>了解与比较</option><option>初次了解</option><option>准备到店体验</option><option>配置确认</option></select></div><div><label for="goal">内容目标</label><select id="goal"><option>帮助选购并引导咨询</option><option>促进到店体验</option><option>解释产品特点</option><option>收集用户需求</option></select></div></div>
+          <label>快速选一个创作方向</label><div class="creative-directions"><button type="button" class="secondary-button" data-direction="checklist">选购清单</button><button type="button" class="secondary-button" data-direction="scene">场景演示</button><button type="button" class="secondary-button" data-direction="concern">顾虑解答</button></div><p class="field-hint">填写结构建议后仍可编辑；这些方向需要实际发布验证效果。</p>
           <label for="requirements">补充要求 <span class="optional">可选</span></label><textarea id="requirements" rows="3" maxlength="1800" placeholder="想突出什么？有哪些需要避免的表达？"></textarea>
           <div id="form-errors" class="form-errors hidden" role="alert"></div>
           <button type="submit" id="generate-button" class="primary-button"><span>✦</span> 生成图文内容 <span class="button-arrow">↗</span></button>
@@ -35,12 +36,61 @@
         <div class="editor-tabs" role="tablist" aria-label="内容视图"><button class="editor-tab active" data-tab="preview" role="tab" aria-selected="true">图文预览</button><button class="editor-tab" data-tab="strategy" role="tab" aria-selected="false">场景策略</button><button class="editor-tab" data-tab="checks" role="tab" aria-selected="false">核验报告 <span id="check-count"></span></button></div>
         <div id="empty-state" class="empty-state"><div class="empty-visual"><div class="paper back"></div><div class="paper front"><span class="paper-tag"></span><span class="paper-line wide"></span><span class="paper-line"></span><div class="paper-image"><span>✦</span></div><span class="paper-line wide"></span><span class="paper-line short"></span></div><span class="visual-plus">+</span></div><div class="eyebrow">A GOOD STORY STARTS WITH FACTS</div><h3>从一份有依据的内容开始</h3><p>选择产品和场景，让资料变成清楚、自然的表达。<br>每一次生成，都附带事实依据与核验记录。</p><button id="example-button" class="secondary-button">试试「开学购机」示例 <span>↗</span></button><div class="empty-feature-row"><span>◉ 型号匹配</span><span>▧ 真实配图</span><span>✓ 逐项核验</span></div></div>
         <div id="preview-tab" class="tab-content hidden"></div><div id="strategy-tab" class="tab-content hidden"></div><div id="checks-tab" class="tab-content hidden"></div>
-        <div id="result-actions" class="result-actions hidden"><div class="export-row"><button id="copy-button" class="secondary-button">复制正文</button><a id="export-md" class="secondary-button" download>导出 Markdown</a><a id="export-txt" class="text-button" download>TXT</a><a id="export-json" class="text-button" download>完整记录 JSON</a></div><div class="revision-box"><label for="revision">继续修改</label><div class="revision-controls"><input id="revision" maxlength="1800" placeholder="例如：删去屏幕卖点，突出日常携带"><select id="revision-platform" aria-label="修改后的平台"><option value="">保持平台</option><option value="xiaohongshu">换成小红书</option><option value="wechat">换成公众号</option><option value="moments">换成朋友圈</option><option value="poster">换成海报</option></select><button id="revise-button" class="primary-button small">修改并核验 ↗</button></div></div></div>
+        <div id="result-actions" class="result-actions hidden"><div class="export-row"><button id="copy-button" class="secondary-button">复制正文</button><button id="record-revision-button" class="secondary-button">记录采用与改稿</button><a id="export-md" class="secondary-button" download>导出 Markdown</a><a id="export-txt" class="text-button" download>TXT</a><a id="export-json" class="text-button" download>完整记录 JSON</a></div><div class="revision-box"><label for="revision">继续修改</label><div class="revision-controls"><input id="revision" maxlength="1800" placeholder="例如：删去屏幕卖点，突出日常携带"><select id="revision-platform" aria-label="修改后的平台"><option value="">保持平台</option><option value="xiaohongshu">换成小红书</option><option value="wechat">换成公众号</option><option value="douyin">换成抖音脚本</option><option value="weibo">换成微博图文</option><option value="moments">换成朋友圈</option><option value="poster">换成海报</option></select><button id="revise-button" class="primary-button small">修改并核验 ↗</button></div></div></div>
       </section>
       <aside class="evidence-panel"><div class="card evidence-card"><div class="panel-title"><span class="step-number">03</span><h2>资料依据</h2><span class="source-badge">LOCAL</span></div><div id="evidence-content" class="evidence-content"><div class="source-placeholder"><span>▤</span><p>选中产品后，查看对应的<br>产品事实与图片来源。</p></div></div></div><div class="workflow-note"><span class="note-line"></span><h3>先有事实，再有表达。</h3><p>产品参数来自本地知识库。<br>动态价格与优惠需另行确认。<br>生成结果在发布前请人工复核。</p></div></aside>
     </section>
     <section id="library-view" class="hidden"><div class="section-heading"><h2>本地资料与图片</h2><p>只读取产品事实及同目录图片索引；未扫描整个知识库。</p></div><div id="library-grid" class="library-grid"></div></section>
     <section id="history-view" class="hidden"><div class="section-heading"><h2>运行记录</h2><p>记录保存在本机，每次修改保留独立版本和核验依据。</p></div><div id="history-list" class="history-list"></div></section>
+
+    <section id="research-view" class="hidden">
+      <div class="section-heading"><div><h2>内容研究与来源数据库</h2><p>发现原帖、读取公开页面、保留真实指标，把创作参考与产品事实分开记录。</p></div><a class="secondary-button" id="research-export" href="/api/research/export" download>导出来源 JSON</a></div>
+      <div id="research-message" class="research-notice" role="status">正在读取数据库状态</div>
+      <details id="research-diagnostics" class="research-diagnostics"><summary>搜索返回与过滤原因</summary><p>执行自动搜索后显示逐组诊断。</p></details><div id="research-stats" class="research-stats"></div>
+      <div class="research-layout">
+        <aside class="research-controls card">
+          <h3>搜索发现</h3><p class="field-hint">四个平台 × 最多6组词 × 每组最多10条；结果数量按真实返回记录。</p>
+          <div class="research-platforms"><label><input type="checkbox" name="research-platform" value="xiaohongshu" checked>小红书</label><label><input type="checkbox" name="research-platform" value="douyin" checked>抖音</label><label><input type="checkbox" name="research-platform" value="weibo" checked>微博</label><label><input type="checkbox" name="research-platform" value="wechat" checked>微信公众号</label></div>
+          <label for="research-keywords">关键词，每行一组</label><textarea id="research-keywords" rows="6" maxlength="650">华为电脑 选购
+华为电脑 大学生
+华为 多屏协同
+华为 电脑 移动办公
+华为 门店 体验
+华为 选购 顾虑</textarea>
+          <div class="two-fields"><div><label for="research-per-query">每组候选上限</label><input id="research-per-query" type="number" min="1" max="10" value="10"></div><div><label for="research-page-limit">本轮原页读取上限</label><input id="research-page-limit" type="number" min="0" max="40" value="20"></div></div>
+          <div class="research-actions"><button id="research-plan" class="secondary-button">查看站内搜索入口</button><button id="research-start" class="primary-button">启动自动搜索采集</button></div>
+          <p class="field-hint">自动搜索可能调用已有模型服务或配置的搜索 API。中转服务不支持联网工具时，会明确报错。页面验证和登录限制会记录为受限。</p>
+          <div id="research-search-links" class="research-search-links"></div>
+          <hr><h3>导入原帖与补充数据</h3><label for="research-urls">原帖 / 华为官方链接，每行一条</label><textarea id="research-urls" rows="4" maxlength="25000" placeholder="粘贴小红书、抖音、微博、公众号原帖或华为官方页面链接"></textarea><button id="research-import-urls" class="secondary-button">链接入库</button>
+          <label for="research-import-file">导入 JSON / CSV</label><input id="research-import-file" type="file" accept=".json,.csv"><p class="field-hint">字段：url、title、summary、excerpt、publishedAt、views、likes、comments、shares、favorites、observedAt、evidence。未知指标留空，导入指标标记为用户提供。</p>
+          <hr><h3>产品事实索引</h3><p class="field-hint">本地产品事实按来源入库；新采集页面须核验后才能作为新增型号依据。</p><button id="research-index-products" class="secondary-button">同步本地产品资料</button><div id="research-products" class="research-product-list"></div>
+        </aside>
+        <div class="research-main">
+          <div class="card research-results"><div class="research-filters"><label>平台<select id="research-filter-platform"><option value="">全部平台与官方资料</option><option value="xiaohongshu">小红书</option><option value="douyin">抖音</option><option value="weibo">微博</option><option value="wechat">微信公众号</option><option value="official">华为官方</option></select></label><label>排序<select id="research-filter-metric"><option value="">最新更新</option><option value="views">阅读 / 播放</option><option value="likes">点赞</option><option value="favorites">收藏</option><option value="comments">评论</option><option value="shares">分享</option></select></label><label>搜索标题 / 正文<input id="research-filter-query" maxlength="100" placeholder="例如：大学生"></label><button id="research-refresh" class="secondary-button">刷新</button></div>
+          <div class="research-toolbar"><span id="research-count">0 条资料</span><button id="research-collect-selected" class="text-button">读取选中原页</button><button id="research-analyse" class="secondary-button">分析选中案例</button></div><p class="field-hint">仅在同一平台、同一可见指标下排序；计数不是因果证明。分析每次最多12条，将调用大模型。</p><div id="research-source-list"></div><div class="research-pagination"><button id="research-prev" class="secondary-button">上一页</button><span id="research-page-label">第1页</span><button id="research-next" class="secondary-button">下一页</button></div></div>
+          <div class="card research-report-panel"><h3>表达研究与待验证方向</h3><p class="field-hint">保存的同平台研究会供创作参考；产品事实始终从产品证据取值。</p><div id="research-reports"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learning-view" class="hidden">
+      <div class="section-heading"><div><h2>客户顾虑与人工改稿</h2><p>用文字记录来源与意见，保留真实顾虑、公开线索、模拟问题各自的标签。</p></div><a class="secondary-button" href="/api/research/learning/export" download>导出反馈样本 JSON</a></div>
+      <div id="learning-message" class="research-notice" role="status">正在读取业务反馈</div><div id="learning-stats" class="research-stats"></div>
+      <div class="learning-grid">
+        <section class="card learning-card"><h3>记录客户顾虑</h3><form id="concern-form">
+          <label>问题或顾虑<textarea id="concern-question" rows="3" maxlength="1000" required placeholder="客户实际问了什么？只记录问题，不填姓名、电话等个人信息。"></textarea></label>
+          <div class="two-fields"><label>目标人群<input id="concern-audience" maxlength="180" placeholder="例如：大学新生"></label><label>场景<input id="concern-scene" maxlength="300" placeholder="例如：开学购机"></label></div>
+          <label>来源类型<select id="concern-origin" required><option value="">请选择来源</option><option value="store_record">门店实际咨询（你提供的记录）</option><option value="public_question">公开用户提问（你核对过的原话）</option><option value="official_faq">官方 FAQ</option><option value="public_topic">公开选题线索</option><option value="simulated">模拟问题</option></select></label>
+          <label>来源依据<textarea id="concern-evidence" rows="2" maxlength="1800" required placeholder="例如：某日门店咨询口述记录；或原帖链接及提问位置。模拟内容请注明。"></textarea></label>
+          <label class="learning-check"><input id="concern-confirmed" type="checkbox">我已核对来源与内容；用于需求参考</label><button class="primary-button" id="concern-save" type="submit">保存顾虑记录</button>
+        </form><details class="learning-import"><summary>批量导入顾虑 JSON</summary><input id="concern-import" type="file" accept=".json"><p class="field-hint">字段：question、audience、scene、origin、evidence、confirmed。每次最多100条，confirmed 仅在你已实际核对时填 true。</p></details><div id="concern-list"></div></section>
+        <section class="card learning-card"><h3>记录采用与修改</h3><p class="field-hint">原稿从运行记录读取。最终稿由你填写；未改动原文会记为采用/评价，不冒充改稿对照。</p>
+          <form id="revision-sample-form"><label>选择已生成原稿<select id="revision-draft" required><option value="">请选择原稿</option></select></label><label>原稿<textarea id="revision-original" rows="6" readonly></textarea></label><label>最终稿<textarea id="revision-final" rows="7" maxlength="20000" required placeholder="可直接编辑原稿，或粘贴你确认采用的版本。"></textarea></label>
+          <label>采用判断<select id="revision-decision"><option value="adopted">采用</option><option value="needs_changes">还需要修改</option><option value="rejected">不采用</option></select></label><label>修改或采用原因<textarea id="revision-reason" rows="2" maxlength="1600" required placeholder="例如：减少空泛形容词，补上软件适配需要到店确认。"></textarea></label>
+          <label class="learning-check"><input id="revision-confirmed" type="checkbox">我已阅读，这是我的实际修改或采用意见</label><button type="submit" id="revision-sample-save" class="primary-button">保存人工样本</button><p class="field-hint">人工改稿可能改变产品断言，保存后标记为待重新核验；这里不会直接训练模型。</p></form><div id="revision-sample-list"></div>
+        </section>
+      </div>
+    </section>
     <footer><span>知序 · GPT + 商城版 <span class="footer-dot">·</span> AI+华为 PC 营销软文智能体</span><span>真实资料 / 场景表达 / 可溯核验</span></footer>
   </main>
   <dialog id="connection-dialog"><div class="dialog-heading"><h2 id="detail-title">连接状态</h2><button id="close-dialog" class="icon-button" aria-label="关闭">×</button></div><div id="connection-details"></div><p id="detail-footnote" class="field-hint">本地版无需 ima 凭证。密钥由后端环境变量读取，页面不展示密钥。模型“已配置”不代表已实时测试。</p></dialog>

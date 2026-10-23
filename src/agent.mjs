@@ -1,3 +1,4 @@
+import {styleReferences,learningReferences} from './research/database.mjs';
 import {ensureMall} from './vmall.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,7 +25,7 @@ export function attachOriginalEvidence(draft,context) {
   return draft;
 }
 function contextForModel(context) {
-  return {product:context.product,facts:context.facts,sources:context.sources,mall:context.mall,images:context.images.map(({id,name,model,description,usage,sourceKind,artworkGroup})=>({id,name,model,description,usage,sourceKind,artworkGroup})),recentImageNames:context.recentImageNames || [],sourceDate:context.source.snapshotDate,warnings:context.warnings,guide:context.guide.slice(0,6000)};
+  return {product:context.product,facts:context.facts,sources:context.sources,mall:context.mall,images:context.images.map(({id,name,model,description,usage,sourceKind,artworkGroup})=>({id,name,model,description,usage,sourceKind,artworkGroup})),customerNeeds:context.customerNeeds || {concerns:[],revisionHints:[]},researchReferences:context.researchReferences || [],recentImageNames:context.recentImageNames || [],sourceDate:context.source.snapshotDate,warnings:context.warnings,guide:context.guide.slice(0,6000)};
 }
 const auditPrompt=`你是证据审核员。根据提供的facts审核draft全部产品断言：标题、导语、正文、CTA、图注都要检查，不能只看claims。
 1. 每条claims是否被对应原文支持？数值、型号、系统版本和重要限制必须对应。无依据的功能、续航、软件兼容性和性能承诺记为unsupported；无法判断记uncertain。
@@ -44,6 +45,8 @@ export async function runAgent(kb,task,{id,progress,revision=null}) {
   await ensureMall().catch(()=>null);
   const context=kb.retrieve(task.productId,task.platform);
   context.catalogNames=kb.catalog().map(p=>p.name);
+  context.researchReferences=styleReferences(task.platform);
+  context.customerNeeds=learningReferences(task);
   const recentNames=new Set();
   if(fs.existsSync(config.cacheDir))for(const file of fs.readdirSync(config.cacheDir).filter(n=>/^[a-f0-9-]{36}\.json$/.test(n)).slice(-8)){
     try{const previous=JSON.parse(fs.readFileSync(path.join(config.cacheDir,file),'utf8'));if(previous.product?.id===task.productId)for(const image of previous.imagePlan || [])recentNames.add(image.name);}catch{}
@@ -55,7 +58,7 @@ export async function runAgent(kb,task,{id,progress,revision=null}) {
   const gap=Math.max(0,target.minImages-context.images.length);
   if(gap) context.warnings.push(target.label+'建议至少'+target.minImages+'张图，当前同型号仅'+context.images.length+'张，仍缺'+gap+'张；不会重复或跨型号补图。');
   const payload={task,initialStrategy:strategy,platformRules:target,context:contextForModel(context),inputRiskNotes:risks,outputSchema,
-    instructions:'输出一份可用的营销图文。正文篇幅 '+target.minChars+'—'+target.maxChars+' 字，图数 '+Math.min(context.images.length,target.minImages)+'—'+Math.min(context.images.length,target.maxImages)+'。source_ids只能引用当前 facts；claims只需选择对应source_ids，后端会附加未经改写的原文证据。正文集中2—4个核心卖点，claims最多8项，避免参数堆叠。内部审核备注只写limitations，不写进正文。',
+    instructions:'输出一份可用的营销图文。正文篇幅 '+target.minChars+'—'+target.maxChars+' 字，图数 '+Math.min(context.images.length,target.minImages)+'—'+Math.min(context.images.length,target.maxImages)+'。source_ids只能引用当前 facts；claims只需选择对应source_ids，后端会附加未经改写的原文证据。正文集中2—4个核心卖点，claims最多8项，避免参数堆叠。sections每段必须包含有依据的产品事实及对应source_ids；纯提问或任务建议放intro/cta，不能硬挂无关来源。内部审核备注只写limitations，不写进正文。',
     revision:revision?{instruction:revision.instruction,previous:revision.previous.article}:null};
   let draft=null, audit=null, finalIssues=[],repairNotes=[],model=config.model, calls=0;
   for(let attempt=0;attempt<2;attempt++) {
@@ -92,7 +95,7 @@ export async function runAgent(kb,task,{id,progress,revision=null}) {
     strategy:blocked?{...strategy,reason:'稿件尚未通过全部核验，显示初步内容策略。'}:draft.strategy,initialStrategy:strategy,article:blocked?null:draft.article,
     claims:blocked?[]:draft.claims.map((claim,i)=>({...claim,index:i+1,review:audit?.claim_checks?.find(c=>c.index===i+1)})),
     imagePlan:blocked?[]:draft.image_plan.map(item=>({...context.images.find(im=>im.id===item.image_id),image_id:item.image_id,position:item.position,after_section:item.after_section,caption:item.caption,reason:item.reason})),
-    evidence:{source:context.source,facts:context.facts,images:context.images,sources:context.sources,mall:context.mall},checks,warnings,issues:finalIssues,repairs:[...new Set(repairNotes)],events,
+    customerNeeds:context.customerNeeds,researchReferences:context.researchReferences,evidence:{source:context.source,facts:context.facts,images:context.images,sources:context.sources,mall:context.mall},checks,warnings,issues:finalIssues,repairs:[...new Set(repairNotes)],events,
     telemetry:{durationSeconds:Math.round((Date.now()-started)/100)/10,modelCalls:calls,promptTokens:usage.reduce((a,b)=>a+(b.prompt_tokens||0),0),completionTokens:usage.reduce((a,b)=>a+(b.completion_tokens||0),0)},revisionOf:revision?.parentId || null};
   fs.mkdirSync(config.cacheDir,{recursive:true});
   fs.writeFileSync(path.join(config.cacheDir,id+'.json'),JSON.stringify(result,null,2),'utf8');
@@ -107,7 +110,8 @@ export function exportMarkdown(result) {
     ...a.sections.flatMap((s,i)=>['### '+s.heading,s.text,renderImages(i+1)]),
     a.cta,a.tags.join(' '),
   ].filter(Boolean).join('\n\n');
+  const researchSources=result.researchReferences?.length?'\n\n## 五、表达研究参考\n\n'+result.researchReferences.map(r=>'- 报告 '+r.id+'（'+r.createdAt+'）：'+r.report.summary+'\n'+(r.sources||[]).map(source=>'  - '+source.title+'：'+source.url).join('\n')).join('\n')+'\n\n以上为创作假设，不是产品事实或流量效果证明。\n':'';
   const imageSources=result.imagePlan.map(im=>'- **'+im.name+'**（'+im.position+'）\n  - 来源：'+(im.sourceName || '本地知识库图片索引')+'\n  - 原始页面：'+im.pageUrl+'\n  - 用途：'+im.reason).join('\n');
-  return '# '+a.title+'\n\n## 一、场景判断\n\n- 人群：'+result.task.audience+'\n- 场景：'+result.task.scene+'\n- 用户问题与目标：'+result.task.goal+'\n- 购买阶段：'+result.task.purchaseStage+'\n- 平台：'+result.platform+'\n- 切入点：'+result.strategy.angle+'\n\n## 二、知识库依据\n\n- 型号：'+result.product.name+'\n- 资料：'+result.evidence.source.path+'\n- 快照日期：'+result.evidence.source.snapshotDate+'\n- 原文 SHA256：'+result.evidence.source.sha256+'\n\n'+result.claims.map(c=>'- '+c.text+'\n'+c.evidence.map(e=>'  - ['+e.source_id+'] '+e.quote).join('\n')).join('\n')+'\n\n## 三、图文软文\n\n'+content+'\n\n### 配图来源索引\n\n'+imageSources+'\n\n## 四、核验结果与待确认项\n\n'+result.checks.map(c=>'- '+c.name+'：'+(c.status==='passed'?'已检查':'待确认')+'；'+c.detail).join('\n')+'\n\n'+result.warnings.map(w=>'- '+w).join('\n')+'\n\n核验记录：'+result.createdAt+'；模型：'+result.model+'。本地资料未实时联网更新，发布前须人工复核。\n';
+  return '# '+a.title+'\n\n## 一、场景判断\n\n- 人群：'+result.task.audience+'\n- 场景：'+result.task.scene+'\n- 用户问题与目标：'+result.task.goal+'\n- 购买阶段：'+result.task.purchaseStage+'\n- 平台：'+result.platform+'\n- 切入点：'+result.strategy.angle+'\n\n## 二、知识库依据\n\n- 型号：'+result.product.name+'\n- 资料：'+result.evidence.source.path+'\n- 快照日期：'+result.evidence.source.snapshotDate+'\n- 原文 SHA256：'+result.evidence.source.sha256+'\n\n'+result.claims.map(c=>'- '+c.text+'\n'+c.evidence.map(e=>'  - ['+e.source_id+'] '+e.quote).join('\n')).join('\n')+'\n\n## 三、图文软文\n\n'+content+'\n\n### 配图来源索引\n\n'+imageSources+'\n\n## 四、核验结果与待确认项\n\n'+result.checks.map(c=>'- '+c.name+'：'+(c.status==='passed'?'已检查':'待确认')+'；'+c.detail).join('\n')+'\n\n'+result.warnings.map(w=>'- '+w).join('\n')+'\n\n核验记录：'+result.createdAt+'；模型：'+result.model+'。本地资料未实时联网更新，发布前须人工复核。\n'+researchSources;
 }
 export {articleText};

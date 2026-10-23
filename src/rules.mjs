@@ -1,6 +1,8 @@
 export const PLATFORMS = {
   xiaohongshu:{label:'小红书',minImages:3,maxImages:6,minChars:240,maxChars:700,structure:'场景型标题、短导语、3—5个短段落、选购建议、评论互动引导、3—6个话题；不用虚构第一人称体验。',tone:'口语、具体、轻松，适当使用少量emoji',cta:'邀请读者留言具体需求或到店体验，不编造联系方式'},
   wechat:{label:'公众号',minImages:2,maxImages:4,minChars:550,maxChars:1400,structure:'标题、导语、3—5个有小标题的论述段、选购边界、结尾行动引导；保持完整叙事。',tone:'清楚、有条理、可信，不堆参数',cta:'引导了解具体销售配置或预约门店体验'},
+  douyin:{label:'抖音图文 / 口播脚本',minImages:1,maxImages:3,minChars:160,maxChars:500,structure:'开场提出一个具体问题，3—5段口播与拍摄建议，结尾引导核对配置或到店体验；每段区分口播和镜头建议，不伪造已完成的实拍或测试。',tone:'短句、口语、明确任务与操作顺序',cta:'邀请留言具体使用需求或到店核对；不承诺性能和流量'},
+  weibo:{label:'微博图文',minImages:1,maxImages:3,minChars:100,maxChars:400,structure:'清楚的标题与开场，2—3个短段围绕一个选购问题，给出有依据的特点和咨询引导，不编造热点事件。',tone:'简洁、信息明确、有讨论空间',cta:'邀请读者说明需求或咨询具体型号'},
   moments:{label:'门店朋友圈',minImages:1,maxImages:3,minChars:60,maxChars:220,structure:'简短标题或首句、一个核心卖点、一段具体场景、简短咨询或到店引导；正文最多2段。',tone:'自然、简洁、像门店导购在沟通',cta:'邀请私信说明需求或到店试用，不虚构地址、电话、活动'},
   poster:{label:'门店海报',minImages:1,maxImages:1,minChars:30,maxChars:150,structure:'主标题、副标题、3个以内短卖点、明确行动引导。没有经核验活动信息时不写促销。',tone:'短句、醒目、易读',cta:'到店体验或咨询配置'},
 };
@@ -66,8 +68,12 @@ export function validateDraft(draft,context,task) {
   if(/全网第一|绝对不卡|永不卡顿|永不掉线|保证不卡|最强|碾压|吊打|行业第一|全球第一|百分之百|终身免费|销量冠军|销量第一/.test(text)) issues.push(issue('absolute','内容包含绝对化表述或无依据排名','compliance'));
   if(/(?:[￥¥]\s*\d|\d[\d,.]*\s*元|补贴\s*\d|立减\s*\d|[1-9](?:\.\d)?折|仅剩\s*\d|限量\s*\d|赠送|免费送)/.test(text)) issues.push(issue('dynamic','包含未经实时确认的价格、优惠或库存承诺','compliance'));
   if(/亲测|我用了|我用过|用了一个月|用了半年|实测续航|用户一致好评|大家都说/.test(text)) issues.push(issue('fake_experience','不得伪造亲身使用、测试或用户评价','compliance'));
-  const catalogNames=context.catalogNames || [];
-  if(catalogNames.some(n=>n!==context.product.name && n.length>8 && text.includes(n))) issues.push(issue('mixed_model','正文混入了其他型号完整名称','facts'));
+  const catalogNames=[...new Set([...(context.catalogNames || []),context.product.name])].filter(n=>n&&n.length>8).sort((a,b)=>b.length-a.length);
+  // Match longer names first: MateBook Pro is a prefix of MateBook Pro S.
+  // Removing each matched full name preserves detection when both models really appear.
+  let remaining=text;const mentioned=[];
+  for(const name of catalogNames)if(remaining.includes(name)){mentioned.push(name);remaining=remaining.split(name).join('');}
+  if(mentioned.some(name=>name!==context.product.name)) issues.push(issue('mixed_model','正文混入了其他型号完整名称','facts'));
   if(/\b\d{2,}(?:\.\d+)?\s*mm\b/i.test(text) && context.warnings.some(w=>w.includes('尺寸字段'))) issues.push(issue('suspect_dimension','使用了已隔离的可疑尺寸参数','facts'));
   const imageMap=new Map(context.images.map(im=>[im.id,im]));
   if(!Array.isArray(draft.image_plan)) issues.push(issue('image_schema','缺少配图方案','images'));

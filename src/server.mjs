@@ -1,3 +1,5 @@
+import {handleResearch} from './research/service.mjs';
+import {indexProducts} from './research/database.mjs';
 import {mallStatus,refreshMall,mallImage,ensureMall} from './vmall.mjs';
 import http from 'node:http';
 import fs from 'node:fs';
@@ -8,13 +10,14 @@ import {LocalKnowledge} from './kb-local.mjs';
 import {normalizeTask,PLATFORMS} from './rules.mjs';
 import {runAgent,exportMarkdown,articleText} from './agent.mjs';
 const kb=new LocalKnowledge();
+try {if(!kb.error)indexProducts(kb);} catch {console.error('研究库产品索引未完成，可在内容研究页重新同步。');}
 const jobs=new Map();
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 function json(res,status,value) {res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
-async function readBody(req) {
+async function readBody(req,maxBytes=32768) {
   if(!String(req.headers['content-type'] || '').startsWith('application/json'))throw Object.assign(new Error('请使用 JSON 请求'),{status:415});
   let bytes=0,chunks=[];
-  for await(const chunk of req) {bytes+=chunk.length;if(bytes>32768)throw Object.assign(new Error('请求过大'),{status:413});chunks.push(chunk);}
+  for await(const chunk of req) {bytes+=chunk.length;if(bytes>maxBytes)throw Object.assign(new Error('请求过大'),{status:413});chunks.push(chunk);}
   try {const body=JSON.parse(Buffer.concat(chunks).toString('utf8'));if(!body || typeof body!=='object' || Array.isArray(body))throw new Error();return body;}catch{throw Object.assign(new Error('请求 JSON 无效'),{status:400});}
 }
 function readResult(id) {
@@ -33,14 +36,24 @@ function history() {
 const server=http.createServer(async(req,res)=>{
   res.setHeader('X-Content-Type-Options','nosniff');
   res.setHeader('Referrer-Policy','no-referrer');
-  res.setHeader('X-Frame-Options','DENY');
-  res.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+
+  res.setHeader('Content-Security-Policy',"default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'self' https://modelscope.cn https://*.modelscope.cn https://*.ms.show; base-uri 'none'; form-action 'self'");
   try {
     const validHosts=new Set(['127.0.0.1:'+config.port,'localhost:'+config.port]);
-    if(!validHosts.has(req.headers.host))return json(res,403,{error:'拒绝非本机访问'});
+    const forwarded=String(req.headers['x-forwarded-host'] || '').split(',')[0].trim();
+    const requestHost=String(req.headers.host || '');
+    if(!/^[a-zA-Z0-9.:-]+$/.test(requestHost))return json(res,403,{error:'请求域名无效'});
+    validHosts.add(requestHost);
+    if(forwarded && /^[a-zA-Z0-9.:-]+$/.test(forwarded))validHosts.add(forwarded);
     const origin=req.headers.origin;
-    if(origin && !['http://127.0.0.1:'+config.port,'http://localhost:'+config.port].includes(origin))return json(res,403,{error:'请求来源无效'});
+    if(origin){let originHost;try{originHost=new URL(origin).host;}catch{return json(res,403,{error:'请求来源无效'});}
+      if(!validHosts.has(originHost))return json(res,403,{error:'请求来源无效'});}
     const url=new URL(req.url,'http://127.0.0.1:'+config.port), route=url.pathname;
+    if(route.startsWith('/api/research/')) {
+      const result=await handleResearch(req,url,r=>readBody(r,1048576),kb,{readResult,history});
+      if(result.download)res.setHeader('Content-Disposition','attachment; filename="'+result.download+'"');
+      return json(res,result.status||200,result.body);
+    }
     if(req.method==='GET' && route==='/api/health')return json(res,200,{mode:'gpt-vmall',provider:'4router',knowledgeReady:!kb.error,knowledgeMessage:kb.error || '已连接本地知识库',productCount:kb.products.length,mall:mallStatus(),modelConfigured:Boolean(config.apiKey),model:config.model,imaRequired:false,platforms:PLATFORMS});
     if(req.method==='GET' && route==='/api/mall/status')return json(res,200,mallStatus());
     if(req.method==='POST' && route==='/api/mall/refresh') {await refreshMall();return json(res,200,mallStatus());}
@@ -98,7 +111,7 @@ const server=http.createServer(async(req,res)=>{
       res.writeHead(200,{'Content-Type':kind==='json'?'application/json; charset=utf-8':'text/plain; charset=utf-8','Content-Disposition':'attachment; filename="huawei-content-'+r.id.slice(0,8)+'.'+kind+'"','Cache-Control':'no-store'});
       return res.end(content);
     }
-    const publicFiles={'/':'index.html','/app.js':'app.js','/styles.css':'styles.css'};
+    const publicFiles={'/':'index.html','/app.js':'app.js','/styles.css':'styles.css','/research.js':'research.js','/learning.js':'learning.js'};
     if(req.method==='GET' && publicFiles[route]) {
       const file=path.join(ROOT,'public',publicFiles[route]);res.writeHead(200,{'Content-Type':mime[path.extname(file)],'Cache-Control':'no-cache'});return fs.createReadStream(file).pipe(res);
     }
