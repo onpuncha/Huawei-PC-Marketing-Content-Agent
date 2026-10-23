@@ -1,0 +1,38 @@
+{
+  "createdAt": "2026-10-23T03:51:41.135Z",
+  "jobId": "84f0812c-8da9-4074-bff4-a4d2dea72140",
+  "state": "done",
+  "status": "ready_with_notes",
+  "title": "带电脑赶会议，MateBook Pro S到店先看这三项",
+  "platform": "抖音图文 / 口播脚本",
+  "researchReports": 1,
+  "issues": [],
+  "checks": [
+    {
+      "name": "产品事实",
+      "status": "passed",
+      "detail": "4项产品事实已定位原文，并由模型复核；依据为本地快照。"
+    },
+    {
+      "name": "图片型号",
+      "status": "passed",
+      "detail": "按本地索引核对型号与文件存在性；未进行视觉识别或授权审查。"
+    },
+    {
+      "name": "配图完整度",
+      "status": "passed",
+      "detail": "可用图片数量满足平台要求。"
+    },
+    {
+      "name": "营销合规",
+      "status": "passed",
+      "detail": "已执行关键词规则与模型审核，发布前仍需人工复核。"
+    }
+  ],
+  "telemetry": {
+    "durationSeconds": 38.5,
+    "modelCalls": 2,
+    "promptTokens": 9480,
+    "completionTokens": 1428
+  }
+}

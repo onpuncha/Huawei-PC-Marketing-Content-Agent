@@ -1,11 +1,11 @@
 {
   "name": "huawei-pc-content-agent-gpt",
-  "version": "0.2.0-gpt",
+  "version": "0.4.0-feedback",
   "private": true,
   "type": "module",
   "description": "Local knowledge-backed Huawei PC marketing agent",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0"
   },
   "scripts": {
     "start": "node src/server.mjs",
@@ -13,5 +13,8 @@
     "test": "node --test tests/*.test.mjs",
     "verify:local": "node tools/verify-gpt.mjs",
     "start:gpt": "node src/server.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.62.1"
   }
 }

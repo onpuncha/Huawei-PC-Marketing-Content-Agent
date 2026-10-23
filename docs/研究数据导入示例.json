@@ -1,0 +1,16 @@
+{
+  "records": [],
+  "说明": "将记录对象填入records；必填url，其他字段未知留空；metrics中的数值必须有实际观察依据。",
+  "字段示意": {
+    "url": "原帖HTTPS链接",
+    "title": "标题",
+    "summary": "摘要",
+    "excerpt": "获准使用的正文摘录",
+    "publishedAt": "YYYY-MM-DD",
+    "metrics": {
+      "likes": "实际整数；未知时删除此字段",
+      "observedAt": "实际观察时间",
+      "evidence": "后台导出文件名或原页指标位置"
+    }
+  }
+}

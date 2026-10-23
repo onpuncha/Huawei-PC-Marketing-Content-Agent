@@ -1,0 +1,13 @@
+{
+  "records": [],
+  "说明": "将你自己的记录放入records。以下fieldExample仅是字段示意，不会作为真实咨询导入。",
+  "fieldExample": {
+    "question": "填写实际问题或明确标注的模拟问题",
+    "audience": "目标人群",
+    "scene": "场景",
+    "origin": "simulated",
+    "evidence": "说明来源，模拟内容要明确标注",
+    "confirmed": false
+  },
+  "origin可选": ["store_record", "public_question", "official_faq", "public_topic", "simulated"]
+}

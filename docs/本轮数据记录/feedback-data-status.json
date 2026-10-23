@@ -1,0 +1,18 @@
+{
+  "postCoverage": {
+    "total": 97,
+    "withText": 12,
+    "withAuthor": 12,
+    "withDate": 12
+  },
+  "casesWithMetrics": 12,
+  "observations": 14,
+  "concerns": [
+    {
+      "origin": "official_faq",
+      "count": 12,
+      "confirmed": 0
+    }
+  ],
+  "revisions": 0
+}
